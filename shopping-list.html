@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping list</title>
+    <style>
+        .label {
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        ol {
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        li button {
+            font-size: 12px;
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .line-through {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .date {
+            font-size: 12px;
+            color: lightslategray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>My shopping list</h1>
+
+    <form>
+        <label class='label' for="item">Enter a new item:</label>
+        <br />
+        <input type="text" name="item" id="item" />
+        <button type='submit'>Add item</button>
+    </form>
+
+    <ol>
+
+    </ol>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            input.focus();
+        });
+
+        const list = document.querySelector('ol');
+        const input = document.querySelector('input');
+        const button = document.querySelector('button');
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', addItem);
+
+        function addItem(e) {
+            // Stop form from refreshing
+            e.preventDefault();
+
+            const item = input.value;
+            input.value = '';
+
+            const newItem = document.createElement('li');
+            const newSpan = document.createElement('span');
+            const newDate = document.createElement('span');
+            const newDeleteButton = document.createElement('button');
+            const newTickOffButton = document.createElement('button');
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            today = dd + '/' + mm + '/' + yyyy;
+
+            newItem.appendChild(newSpan);
+            newItem.appendChild(newDate);
+            newItem.appendChild(newTickOffButton);
+            newItem.appendChild(newDeleteButton);
+            newDate.textContent = today;
+            newDate.classList.add('date');
+            newSpan.textContent = item + ' ';
+            newDeleteButton.textContent = 'Delete';
+            newTickOffButton.textContent = 'Added';
+
+            list.appendChild(newItem);
+
+            newDeleteButton.addEventListener('click', deleteItem);
+            newTickOffButton.addEventListener('click', tickOffItem);
+
+            // How is this deleting the specific li item?
+            function deleteItem() {
+                list.removeChild(newItem);
+                input.focus();
+            }
+
+            function tickOffItem() {
+                newSpan.classList.toggle('line-through');
+                if (newTickOffButton.textContent === 'Added') {
+                    newTickOffButton.textContent = 'Undo';
+                } else {
+                    newTickOffButton.textContent = 'Added';
+                }
+            }
+
+            input.focus();
+        }
+
+    </script>
+</body>
+
+</html>
